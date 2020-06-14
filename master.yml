@@ -1,0 +1,45 @@
+#Please refer Readme Document for Detailed Information
+
+---
+- name: Ansible Playbook for Installing the Open Source Jenkins
+  become: true
+  hosts: all
+  tasks:
+    - name: Install the Jenkins Pre-requisites
+      yum:
+        name:
+          - wget
+          - java-1.8.0-openjdk
+
+    - name: Download the Open Source jenkins.repo
+      get_url:
+        url: http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo
+        dest: /etc/yum.repos.d/jenkins.repo
+
+    - name: Import the  Open Source Jenkins Key
+      rpm_key:
+        state: present
+        key: https://jenkins-ci.org/redhat/jenkins-ci.org.key
+
+    - name: Install the Jenkins Package
+      yum:
+        name: jenkins
+        state: present
+
+    - name: Start & Enable Jenkins
+      systemd:
+        name: jenkins
+        state: started
+        enabled: true
+
+    - name: Sleep for 30 seconds and continue with play
+      wait_for: timeout=30
+
+    - name: Get the init password Jenkins
+      shell: cat /var/lib/jenkins/secrets/initialAdminPassword
+      changed_when: false
+      register: password
+
+    - name: Print init password Jenkins
+      debug:
+        var: password.stdout
