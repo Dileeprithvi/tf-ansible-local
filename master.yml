@@ -36,7 +36,7 @@
       wait_for: timeout=50
 
     - name: Get the init password Jenkins
-      shell: cat /var/lib/jenkins/secrets/initialAdminPassword
+      command: cat /var/lib/jenkins/secrets/initialAdminPassword
       changed_when: false
       register: password
 
