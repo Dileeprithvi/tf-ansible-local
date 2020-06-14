@@ -32,8 +32,8 @@
         state: started
         enabled: true
 
-    - name: Sleep for 30 seconds and continue with play
-      wait_for: timeout=30
+    - name: Sleep for 50 seconds and continue with play
+      wait_for: timeout=50
 
     - name: Get the init password Jenkins
       shell: cat /var/lib/jenkins/secrets/initialAdminPassword
